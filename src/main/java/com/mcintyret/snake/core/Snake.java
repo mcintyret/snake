@@ -30,18 +30,32 @@ public class Snake {
         ));
     }
 
+    private Direction pendingDirection = null;
     void update(long millisSinceLastUpdate, Direction newDirection) {
-        newDirection = validateNewDirection(newDirection);
-
         final int pixelsMoved = (int) (speedInPixelsPerSecond * millisSinceLastUpdate / 1000D);
 
         if (pixelsMoved == 0) {
             return;
         }
 
-        Rectangle prevHead = parts.getLast();
+        if (pendingDirection != null) {
+            newDirection = pendingDirection;
+        } else {
+            newDirection = validateNewDirection(newDirection);
+        }
+
+        Rectangle prevHead = getHead();
         if (newDirection != null) {
-            parts.addLast(createNextRectangle(newDirection, prevHead, pixelsMoved));
+            int distanceToPixelBoundary = getDistanceToPixelBoundary(prevHead);
+
+            if (distanceToPixelBoundary > pixelsMoved) {
+                pendingDirection = newDirection;
+                prevHead.extend(pixelsMoved);
+            } else {
+                prevHead.extend(distanceToPixelBoundary);
+                parts.addLast(createNextRectangle(newDirection, prevHead, pixelsMoved - distanceToPixelBoundary));
+                pendingDirection = null;
+            }
 
         } else {
             prevHead.extend(pixelsMoved);
@@ -60,6 +74,22 @@ public class Snake {
                 part.contract(pixelsToRemove);
             }
             pixelsToRemove -= pixelsToRemove;
+        }
+    }
+
+    private int getDistanceToPixelBoundary(Rectangle prevHead) {
+        switch (prevHead.getDirection()) {
+            case UP:
+                return prevHead.getY() % width;
+            case DOWN:
+                return width - ((prevHead.getY() + prevHead.getHeight()) % width);
+            case LEFT:
+                return prevHead.getX() % width;
+            case RIGHT:
+                return width - ((prevHead.getX() + prevHead.getWidth()) % width);
+            default:
+                throw new AssertionError();
+
         }
     }
 
@@ -92,7 +122,8 @@ public class Snake {
             return null;
         }
 
-        return parts.getLast().getDirection() == newDirection.opposite() ? null : newDirection;
+        Direction currentDirection = getCurrentDirection();
+        return currentDirection == newDirection.opposite() || currentDirection == newDirection ? null : newDirection;
     }
 
     public List<Rectangle> getParts() {
