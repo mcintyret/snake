@@ -46,7 +46,7 @@ public class Snake {
 
         Rectangle prevHead = getHead();
         if (newDirection != null) {
-            int distanceToPixelBoundary = getDistanceToPixelBoundary(prevHead);
+            int distanceToPixelBoundary = getSnakeLength(prevHead) == 0 ? width : getDistanceToPixelBoundary(prevHead);
 
             if (distanceToPixelBoundary > pixelsMoved) {
                 pendingDirection = newDirection;
