@@ -125,16 +125,16 @@ public class Rectangle {
         }
     }
 
-    public boolean overlaps(Rectangle b) {
-        Rectangle left = x < b.x ? this : b;
-        Rectangle right = left == this ? b : this;
+    public boolean overlaps(Rectangle other) {
+        Rectangle left = x < other.x ? this : other;
+        Rectangle right = left == this ? other : this;
 
         if (left.x + left.width <= right.x) {
             return false;
         }
 
-        Rectangle lower = this.y < b.y ? this : b;
-        Rectangle upper = lower == this ? b : this;
+        Rectangle lower = this.y < other.y ? this : other;
+        Rectangle upper = lower == this ? other : this;
 
         if (lower.y + lower.height <= upper.y) {
             return false;
