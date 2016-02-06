@@ -15,7 +15,7 @@ public class Grid {
     public Grid(int width, int height, int snakeWidth) {
         this.width = calculateClosest(width, snakeWidth);
         this.height = calculateClosest(height, snakeWidth);
-        this.snake = new Snake(new Bearing(width / 2, height / 2, Direction.LEFT), DEFAULT_INITIAL_LENGTH, snakeWidth);
+        this.snake = new Snake(new Bearing(this.width / 2, this.height / 2, Direction.LEFT), DEFAULT_INITIAL_LENGTH, snakeWidth);
     }
 
     private int calculateClosest(int val, int snakeWidth) {
@@ -44,9 +44,9 @@ public class Grid {
             alive = false;
         } else if (headX >= width && direction == Direction.RIGHT) {
             alive = false;
-        } else if (headY <= 0 && direction == Direction.DOWN) {
+        } else if (headY >= height && direction == Direction.DOWN) {
             alive = false;
-        } else if (headY >= height && direction == Direction.UP) {
+        } else if (headY <= 0 && direction == Direction.UP) {
             alive = false;
         } else {
             alive = !snake.isEatingSelf();
