@@ -12,13 +12,15 @@ public class GUI {
 
     private static final int FRAMES_PER_SECOND = 25;
 
+    private static final int DEFAULT_SNAKE_WIDTH = 10;
+
     private static final long MILLIS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 
     public static void main(String[] args) throws InterruptedException {
 
         FRAME.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        Grid grid = new Grid(1000, 700);
+        Grid grid = new Grid(1000, 700, DEFAULT_SNAKE_WIDTH);
 
         GridPanel gridPanel = new GridPanel(grid);
         FRAME.getContentPane().add(gridPanel);

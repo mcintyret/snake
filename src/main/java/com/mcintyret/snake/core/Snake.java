@@ -10,12 +10,14 @@ public class Snake {
 
     private int speedInPixelsPerSecond = 100;
 
-    private final int width = 10;
+    private final int width;
 
     private int length;
 
-    public Snake(Bearing initialHeadPos, int initialLength) {
+    public Snake(Bearing initialHeadPos, int initialLength, int snakeWidth) {
         this.length = initialLength;
+        this.width = snakeWidth;
+
         Direction initialDirection = initialHeadPos.getDirection();
         boolean vertical = initialDirection.isVertical();
 
