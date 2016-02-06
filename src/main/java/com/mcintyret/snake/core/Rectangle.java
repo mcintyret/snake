@@ -126,6 +126,14 @@ public class Rectangle {
     }
 
     public boolean overlaps(Rectangle other) {
+        if (this.height == 0 || this.width == 0) {
+            return false;
+        }
+
+        if (other.height == 0 || other.width == 0) {
+            return false;
+        }
+
         Rectangle left = x < other.x ? this : other;
         Rectangle right = left == this ? other : this;
 
