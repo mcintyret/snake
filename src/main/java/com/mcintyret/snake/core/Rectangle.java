@@ -142,4 +142,9 @@ public class Rectangle {
 
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Rectangle(" + x + ", " + y + ", " + width + ", " + height + ", " + direction + ")";
+    }
 }
