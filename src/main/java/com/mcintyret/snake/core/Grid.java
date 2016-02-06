@@ -13,9 +13,18 @@ public class Grid {
     private boolean alive = true;
 
     public Grid(int width, int height, int snakeWidth) {
-        this.width = width;
-        this.height = height;
+        this.width = calculateClosest(width, snakeWidth);
+        this.height = calculateClosest(height, snakeWidth);
         this.snake = new Snake(new Bearing(width / 2, height / 2, Direction.LEFT), DEFAULT_INITIAL_LENGTH, snakeWidth);
+    }
+
+    private int calculateClosest(int val, int snakeWidth) {
+        int rem = val % snakeWidth;
+        if (rem < snakeWidth / 2) {
+            return val - rem;
+        } else {
+            return val + (snakeWidth - rem);
+        }
     }
 
     public void update(long millisSinceLastUpdate, Direction newDirection) {
