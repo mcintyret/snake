@@ -1,13 +1,14 @@
 package com.mcintyret.snake.core;
 
 public class Rectangle {
-    private final int x;
 
-    private final int y;
+    private int x;
 
-    private final int width;
+    private int y;
 
-    private final int height;
+    private int width;
+
+    private int height;
 
     private final Direction direction;
 
@@ -39,47 +40,60 @@ public class Rectangle {
         return y;
     }
 
-    public Rectangle contract(int size) {
+
+    public void contract(int size) {
         if (size < 0) {
             throw new IllegalArgumentException();
         }
 
         if (size == 0) {
-            return this;
+            return;
         }
 
         switch (direction) {
             case UP:
-                return new Rectangle(x, y, width, height - size, direction);
+                height -= size;
+                break;
             case DOWN:
-                return new Rectangle(x, y + size, width, height - size, direction);
+                height -= size;
+                y += size;
+                break;
             case LEFT:
-                return new Rectangle(x, y, width - size, height, direction);
+                width -= size;
+                break;
             case RIGHT:
-                return new Rectangle(x + size, y, width - size, height, direction);
+                x += size;
+                width -= size;
+                break;
             default:
                 throw new AssertionError();
         }
     }
 
-    public Rectangle extend(int size) {
+    public void extend(int size) {
         if (size < 0) {
             throw new IllegalArgumentException();
         }
 
         if (size == 0) {
-            return this;
+            return;
         }
 
         switch (direction) {
             case UP:
-                return new Rectangle(x, y - size, width, height + size, direction);
+                y -= size;
+                height += size;
+                break;
             case DOWN:
-                return new Rectangle(x, y, width, height + size, direction);
+                height += size;
+                break;
             case LEFT:
-                return new Rectangle(x - size, y, width + size, height, direction);
+                x -= size;
+                width += size;
+                break;
             case RIGHT:
-                return new Rectangle(x, y, width + size, height, direction);
+                width += size;
+                break;
             default:
                 throw new AssertionError();
         }

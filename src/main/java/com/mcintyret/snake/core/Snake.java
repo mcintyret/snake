@@ -39,13 +39,12 @@ public class Snake {
             return;
         }
 
+        Rectangle prevHead = parts.getLast();
         if (newDirection != null) {
-            Rectangle prevHead = parts.getLast();
             parts.addLast(createNextRectangle(newDirection, prevHead, pixelsMoved));
 
         } else {
-            Rectangle head = parts.removeLast();
-            parts.addLast(head.extend(pixelsMoved));
+            prevHead.extend(pixelsMoved);
         }
 
         ListIterator<Rectangle> it = parts.listIterator();
@@ -58,7 +57,7 @@ public class Snake {
                 it.remove();
             } else {
                 // update this rectangle
-                it.set(part.contract(pixelsToRemove));
+                part.contract(pixelsToRemove);
             }
             pixelsToRemove -= pixelsToRemove;
         }
