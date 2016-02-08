@@ -15,7 +15,7 @@ public class Grid {
     public Grid(int width, int height, int snakeWidth) {
         this.width = calculateClosest(width, snakeWidth);
         this.height = calculateClosest(height, snakeWidth);
-        this.snake = new Snake(new Bearing(this.width / 2, this.height / 2, Direction.LEFT), DEFAULT_INITIAL_LENGTH, snakeWidth);
+        this.snake = new Snake(new Point(this.width / 2, this.height / 2), Direction.LEFT, DEFAULT_INITIAL_LENGTH, snakeWidth);
     }
 
     private int calculateClosest(int val, int snakeWidth) {

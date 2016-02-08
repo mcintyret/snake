@@ -14,11 +14,10 @@ public class Snake {
 
     private int length;
 
-    public Snake(Bearing initialHeadPos, int initialLength, int snakeWidth) {
+    public Snake(Point initialHeadPos, Direction initialDirection, int initialLength, int snakeWidth) {
         this.length = initialLength;
         this.width = snakeWidth;
 
-        Direction initialDirection = initialHeadPos.getDirection();
         boolean vertical = initialDirection.isVertical();
 
         parts.add(new Rectangle(
