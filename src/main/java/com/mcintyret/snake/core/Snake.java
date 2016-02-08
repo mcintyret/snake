@@ -46,17 +46,17 @@ public class Snake {
 
         Rectangle prevHead = getHead();
         if (newDirection != null) {
-            int distanceToPixelBoundary = getSnakeLength(prevHead) == 0 ? width : getDistanceToPixelBoundary(prevHead);
+            int prevLength = getSnakeLength(prevHead);
+            int distanceToPixelBoundary = (prevLength == 0 || prevLength == 10) ? width : getDistanceToPixelBoundary(prevHead);
 
             if (distanceToPixelBoundary > pixelsMoved) {
                 pendingDirection = newDirection;
                 prevHead.extend(pixelsMoved);
             } else {
-                prevHead.extend(distanceToPixelBoundary);
+                prevHead.extend(distanceToPixelBoundary - width);
                 parts.addLast(createNextRectangle(newDirection, prevHead, pixelsMoved - distanceToPixelBoundary));
                 pendingDirection = null;
             }
-
         } else {
             prevHead.extend(pixelsMoved);
         }
@@ -73,7 +73,19 @@ public class Snake {
                 // update this rectangle
                 part.contract(pixelsToRemove);
             }
-            pixelsToRemove -= pixelsToRemove;
+            pixelsToRemove -= Math.min(partLength, pixelsToRemove);
+        }
+
+//        checkTotalLength();
+    }
+
+    private void checkTotalLength() {
+        int totalLength = 0;
+        for (Rectangle part : parts) {
+            totalLength += getSnakeLength(part);
+        }
+        if (totalLength > length) {
+            System.out.println("woops");
         }
     }
 
@@ -96,18 +108,18 @@ public class Snake {
     private Rectangle createNextRectangle(Direction newDirection, Rectangle prevHead, int initialSize) {
         Direction prevDirection = prevHead.getDirection();
         if (prevDirection.isVertical()) {
-            int newY = prevDirection == Direction.UP ? prevHead.getY() : prevHead.getY() + prevHead.getHeight() - width;
+            int newY = prevDirection == Direction.UP ? prevHead.getY() - width : prevHead.getY() + prevHead.getHeight();
             if (newDirection == Direction.LEFT) {
-                return new Rectangle(prevHead.getX() - initialSize, newY, initialSize, width, newDirection);
+                return new Rectangle(prevHead.getX() - initialSize, newY, initialSize + width, width, newDirection);
             } else {
-                return new Rectangle(prevHead.getX() + width, newY, initialSize, width, newDirection);
+                return new Rectangle(prevHead.getX(), newY, initialSize + width, width, newDirection);
             }
         } else {
-            int newX = prevDirection == Direction.LEFT ? prevHead.getX() : prevHead.getX() + prevHead.getWidth() - width;
+            int newX = prevDirection == Direction.LEFT ? prevHead.getX() - width : prevHead.getX() + prevHead.getWidth();
             if (newDirection == Direction.UP) {
-                return new Rectangle(newX, prevHead.getY() - initialSize, width, initialSize, newDirection);
+                return new Rectangle(newX, prevHead.getY() - initialSize, width, initialSize + width, newDirection);
             } else {
-                return new Rectangle(newX, prevHead.getY() + width, width, initialSize, newDirection);
+                return new Rectangle(newX, prevHead.getY(), width, initialSize + width, newDirection);
             }
         }
     }
