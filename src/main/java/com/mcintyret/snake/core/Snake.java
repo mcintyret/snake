@@ -14,6 +14,8 @@ public class Snake {
 
     private int length;
 
+    private int remainingToGrow = 0;
+
     public Snake(Point initialHeadPos, Direction initialDirection, int initialLength, int snakeWidth) {
         this.length = initialLength;
         this.width = snakeWidth;
@@ -62,6 +64,10 @@ public class Snake {
 
         ListIterator<Rectangle> it = parts.listIterator();
         int pixelsToRemove = pixelsMoved;
+        int growth = Math.min(pixelsToRemove, remainingToGrow);
+        pixelsToRemove -= growth;
+        remainingToGrow -= growth;
+
         while (pixelsToRemove > 0 && it.hasNext()) {
             Rectangle part = it.next();
             int partLength = getSnakeLength(part);
@@ -83,7 +89,7 @@ public class Snake {
         for (Rectangle part : parts) {
             totalLength += getSnakeLength(part);
         }
-        if (totalLength > length) {
+        if (totalLength + remainingToGrow != length) {
             System.out.println("woops");
         }
     }
@@ -182,5 +188,17 @@ public class Snake {
 
     void setSpeedInPixelsPerSecond(int speedInPixelsPerSecond) {
         this.speedInPixelsPerSecond = speedInPixelsPerSecond;
+    }
+
+    int getLength() {
+        return length;
+    }
+
+    void setLength(int length) {
+        if (length <= this.length) {
+            throw new IllegalArgumentException("Length can only get bigger");
+        }
+        remainingToGrow += length - this.length;
+        this.length = length;
     }
 }

@@ -81,8 +81,8 @@ public class Grid {
 
         if (alive) {
             if (snake.getHead().overlaps(food)) {
-                snake.setSpeedInPixelsPerSecond(snake.getSpeedInPixelsPerSecond() + 100);
-                // TODO get longer
+                snake.setSpeedInPixelsPerSecond(snake.getSpeedInPixelsPerSecond() + 60);
+                snake.setLength(snake.getLength() + 80);
                 // TODO: update score
                 updateFood();
             }
