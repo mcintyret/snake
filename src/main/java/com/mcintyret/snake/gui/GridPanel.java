@@ -55,8 +55,14 @@ public class GridPanel extends JPanel {
         Snake snake = grid.getSnake();
 
         for (Rectangle rectangle : snake.getParts()) {
-            g.fillRect(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+            drawRectangle(g, rectangle);
         }
+
+        drawRectangle(g, grid.getFood());
+    }
+
+    private void drawRectangle(Graphics g, Rectangle rectangle) {
+        g.fillRect(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
     }
 
     private long lastUpdate = System.currentTimeMillis();

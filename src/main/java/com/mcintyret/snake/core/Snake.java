@@ -157,7 +157,7 @@ public class Snake {
         return getHead().getGrowingY();
     }
 
-    private Rectangle getHead() {
+    Rectangle getHead() {
         return parts.getLast();
     }
 
@@ -174,5 +174,13 @@ public class Snake {
             }
         }
         return false;
+    }
+
+    int getSpeedInPixelsPerSecond() {
+        return speedInPixelsPerSecond;
+    }
+
+    void setSpeedInPixelsPerSecond(int speedInPixelsPerSecond) {
+        this.speedInPixelsPerSecond = speedInPixelsPerSecond;
     }
 }

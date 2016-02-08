@@ -1,10 +1,16 @@
 package com.mcintyret.snake.core;
 
+import java.util.Random;
+
 public class Grid {
 
     private static final int DEFAULT_INITIAL_LENGTH = 200;
 
+    private static final Random RANDOM = new Random();
+
     private final Snake snake;
+
+    private final int snakeWidth;
 
     private final int width;
 
@@ -12,13 +18,51 @@ public class Grid {
 
     private boolean alive = true;
 
+    private Rectangle food;
+
     public Grid(int width, int height, int snakeWidth) {
-        this.width = calculateClosest(width, snakeWidth);
-        this.height = calculateClosest(height, snakeWidth);
+        this.snakeWidth = snakeWidth;
+        this.width = calculateClosest(width);
+        this.height = calculateClosest(height);
         this.snake = new Snake(new Point(this.width / 2, this.height / 2), Direction.LEFT, DEFAULT_INITIAL_LENGTH, snakeWidth);
+        updateFood();
     }
 
-    private int calculateClosest(int val, int snakeWidth) {
+    private Point randomPoint() {
+        return new Point(
+            calculateClosest(RANDOM.nextInt(this.width - snakeWidth)),
+            calculateClosest(RANDOM.nextInt(this.height - snakeWidth))
+        );
+    }
+
+    private void updateFood() {
+        Rectangle food;
+        while (true) {
+            Point foodPoint = randomPoint();
+            food = new Rectangle(
+                foodPoint.getX(),
+                foodPoint.getY(),
+                snakeWidth,
+                snakeWidth,
+                null
+            );
+
+            boolean overlapsSnake = false;
+            for (Rectangle part : snake.getParts()) {
+                if (part.overlaps(food)) {
+                    overlapsSnake = true;
+                    break;
+                }
+            }
+
+            if (!overlapsSnake) {
+                this.food = food;
+                return;
+            }
+        }
+    }
+
+    private int calculateClosest(int val) {
         int rem = val % snakeWidth;
         if (rem < snakeWidth / 2) {
             return val - rem;
@@ -34,6 +78,15 @@ public class Grid {
         snake.update(millisSinceLastUpdate, newDirection);
 
         checkAlive();
+
+        if (alive) {
+            if (snake.getHead().overlaps(food)) {
+                snake.setSpeedInPixelsPerSecond(snake.getSpeedInPixelsPerSecond() + 100);
+                // TODO get longer
+                // TODO: update score
+                updateFood();
+            }
+        }
     }
 
     private void checkAlive() {
@@ -67,5 +120,13 @@ public class Grid {
 
     public int getWidth() {
         return width;
+    }
+
+    public Rectangle getFood() {
+        return food;
+    }
+
+    public void setFood(Rectangle food) {
+        this.food = food;
     }
 }
